@@ -29,8 +29,8 @@ class Point:
     def __truediv__(self, k: float):
         return Point(self.x / k, self.y / k)
     
-    def __str__(self):
-        return f"Point({self.x}, {self.y})"
+    def __repr__(self):
+        return "Point({:.2f}, {:.2f})".format(self.x, self.y)
 
 
 class Vector:
@@ -74,8 +74,8 @@ class Vector:
         # scalar product
         return Vector(self.start * k, self.end * k)
 
-    def __str__(self):
-        return f"Vector({self.vector.x}, {self.vector.y})"
+    def __repr__(self):
+        return "Vector({:.2f}, {:.2f})".format(self.vector.x, self.vector.y)
 
 
 def clockwiseangle_and_distance(point: Point, origin=Point(0, 0), refvec=Vector(end=Point(0, 1))):
@@ -95,9 +95,6 @@ def clockwiseangle_and_distance(point: Point, origin=Point(0, 0), refvec=Vector(
 a, b = map(float, input().split())
 h = float(input())
 m, n, o, p = map(float, input().split())
-if m > o:
-    m, o = o, m
-    n, p = p, n
 
 O = Point(a, b)
 A = Point(m, n)
@@ -110,16 +107,19 @@ if Vector(O, A).length() <= h and Vector(O, B).length() <= h and\
     # rectangle inside circle, no intersection
     rect: List[Point] = [A, B, C, D]
     rect.sort(key=lambda p: clockwiseangle_and_distance(p, origin=Point(a, b))[1])
-    rect = rect[:2]
-
-    vec_a = Vector(O, rect[0])
-    vec_b = Vector(O, rect[1])
-    vec_a_len = vec_a.length()
-    vec_b_len = vec_b.length()
+    max_angle = -float('inf')
+    for i in range(len(rect)):
+        for j in range(i + 1, len(rect)):
+            vec_a = Vector(O, rect[i])
+            vec_b = Vector(O, rect[j])
+            
+            vec_a_len = vec_a.length()
+            vec_b_len = vec_b.length()
+            
+            angle_a_b_cos = acos((vec_a * vec_b) / (vec_a_len * vec_b_len))
+            max_angle = max(max_angle, angle_a_b_cos)
     
-    angle_a_b_cos = acos((vec_a * vec_b) / (vec_a_len * vec_b_len))
-    
-    PROB = angle_a_b_cos / (2 * pi)
+    PROB = max_angle / (2 * pi)
 else:
     # intersection exists
     intersects_set: Set[Tuple[Point, int]] = set()
