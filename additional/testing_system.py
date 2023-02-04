@@ -86,23 +86,11 @@ def run(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, tower:
             if enemy.heading == 0:
                 if enemy.position + 1 < 20:
                     if structures[enemy.position + 1].name not in ('base', 'fence', 'cannon', 'tower'):
-                        for another_enemy in enemies:
-                            if enemy == another_enemy:
-                                continue
-                            if enemy.position + 1 == another_enemy.position:
-                                break
-                        else:
-                            enemy.position += 1
+                        enemy.position += 1
             elif enemy.heading == 1:
                 if enemy.position - 1 >= 0:
                     if structures[enemy.position - 1].name not in ('base', 'fence', 'cannon', 'tower'):
-                        for another_enemy in enemies:
-                            if enemy == another_enemy:
-                                continue
-                            if enemy.position - 1 == another_enemy.position:
-                                break
-                        else:
-                            enemy.position -= 1
+                        enemy.position -= 1
         # 2. make damage to player's structures
         for enemy in enemies:
             if enemy.position + 1 < 20:
