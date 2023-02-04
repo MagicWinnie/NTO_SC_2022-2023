@@ -4,8 +4,8 @@ from typing import List
 class Enemy:
     def __init__(self, hp: int, dmg: int, heading: int, position: int):
         # check if vars are in correct range
-        if not in_range(1, hp, 25): raise Exception('Hp value is not in range')
-        if not in_range(1, dmg, 3): raise Exception('Dmg value is not in range')
+        if not(1 <= hp <= 25): raise Exception('Hp value is not in range')
+        if not(1 <= dmg <= 3): raise Exception('Dmg value is not in range')
 
         self.hp = hp
         self.dmg = dmg
@@ -45,20 +45,13 @@ class Structre:
         return f"{self.name.capitalize()}({self.hp}, {self.dmg})"
 
 
-def in_range(a: int, x: int, b: int, inclusive_borders: bool=True) -> bool:
-    if inclusive_borders:
-        return a <= x <= b
-    else:
-        return a < x < b
-
-
 def run(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, tower: int, answer: str) -> bool:
     # check if vars are in correct range    
-    if not in_range(1, base, 3): raise Exception('Base value is not in range')
-    if not in_range(1, fence, 6): raise Exception('Fence value is not in range')
-    if not in_range(1, trap, 6): raise Exception('Trap value is not in range')
-    if not in_range(1, cannon, 6): raise Exception('Cannon value is not in range')
-    if not in_range(1, tower, 6): raise Exception('Tower value is not in range')
+    if not(1 <= base <= 3): raise Exception('Base value is not in range')
+    if not(1 <= fence <= 6): raise Exception('Fence value is not in range')
+    if not(1 <= trap <= 6): raise Exception('Trap value is not in range')
+    if not(1 <= cannon <= 6): raise Exception('Cannon value is not in range')
+    if not(1 <= tower <= 6): raise Exception('Tower value is not in range')
     # check if the answer coincides with the problem statement
     if len(answer) != 20: raise Exception('Answer length is not in range')
     if not answer.startswith('=') or not answer.endswith('='): raise Exception('First or last cell is not empty')
@@ -94,7 +87,7 @@ def run(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, tower:
                 if enemy.position + 1 < 20:
                     if structures[enemy.position + 1].name not in ('base', 'fence', 'cannon', 'tower'):
                         enemy.position += 1
-            if enemy.heading == 1:
+            elif enemy.heading == 1:
                 if enemy.position - 1 >= 0:
                     if structures[enemy.position - 1].name not in ('base', 'fence', 'cannon', 'tower'):
                         enemy.position -= 1
