@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 
 class Enemy:
@@ -45,7 +45,7 @@ class Structre:
         return f"{self.name.capitalize()}({self.hp}, {self.dmg})"
 
 
-def run(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, tower: int, answer: str) -> bool:
+def run(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, tower: int, answer: str) -> Tuple[bool, int]:
     # check if vars are in correct range    
     if not(1 <= base <= 3): raise Exception('Base value is not in range')
     if not(1 <= fence <= 6): raise Exception('Fence value is not in range')
@@ -86,25 +86,37 @@ def run(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, tower:
             if enemy.heading == 0:
                 if enemy.position + 1 < 20:
                     if structures[enemy.position + 1].name not in ('base', 'fence', 'cannon', 'tower'):
-                        enemy.position += 1
+                        for another_enemy in enemies:
+                            if enemy == another_enemy:
+                                continue
+                            if enemy.position + 1 == another_enemy.position:
+                                break
+                        else:
+                            enemy.position += 1
             elif enemy.heading == 1:
                 if enemy.position - 1 >= 0:
                     if structures[enemy.position - 1].name not in ('base', 'fence', 'cannon', 'tower'):
-                        enemy.position -= 1
+                        for another_enemy in enemies:
+                            if enemy == another_enemy:
+                                continue
+                            if enemy.position - 1 == another_enemy.position:
+                                break
+                        else:
+                            enemy.position -= 1
         # 2. make damage to player's structures
         for enemy in enemies:
             if enemy.position + 1 < 20:
                 structures[enemy.position + 1].hp -= enemy.dmg
                 if structures[enemy.position + 1].hp <= 0:
                     if structures[enemy.position + 1].name == "base":
-                        return False
+                        return False, points
                     else:
                         structures[enemy.position + 1] = Structre('free')
             if enemy.position - 1 >= 0:
                 structures[enemy.position - 1].hp -= enemy.dmg
                 if structures[enemy.position - 1].hp <= 0:
                     if structures[enemy.position - 1].name == "base":
-                        return False
+                        return False, points
                     else:
                         structures[enemy.position - 1] = Structre('free')
         # 3. new enemies appear
@@ -152,10 +164,13 @@ def run(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, tower:
                 del enemies[i]
             else:
                 i += 1
-    return True
+        # 6. add point if all ok
+        points += 1
+    return True, points
 
 
 if __name__ == "__main__":
+    print(run(1, 1, 1, 2, 1, 1, 1, '========FBF========='))
     print(run(1, 1, 1, 3, 3, 1, 2, '=R==FTC=B==F=TFRR==='))
     print(run(24, 1, 1, 3, 3, 1, 2, '=R==FTC=B==F=TFRR==='))
 
