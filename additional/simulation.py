@@ -158,6 +158,10 @@ def simulation(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int,
 
 
 if __name__ == "__main__":
+    # tests from authors
+    print(simulation(10, 2, 2, 3, 1, 1, 4, '====RFTFTBBTFCT====='))
+    print(simulation(12, 1, 1, 2, 3, 2, 5, '=RR=TTT=FCBCF=TT=R=='))
+    # some custom tests
     print(simulation(1, 1, 1, 2, 1, 1, 1, '========FBF========='))
     print(simulation(1, 1, 1, 3, 3, 1, 2, '=R==FTC=B==F=TFRR==='))
     print(simulation(24, 1, 1, 3, 3, 1, 2, '=R==FTC=B==F=TFRR==='))
