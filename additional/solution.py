@@ -65,7 +65,7 @@ class Board:
             self.available[structures[i]] -= 1
         return True
 
-    def put_structures_symmetry(self, structures: str, position: int, priority: bool=False) -> Tuple[bool, bool]:
+    def put_structures_symmetry(self, structures: str, position: int) -> Tuple[bool, bool]:
         if self.get_empty_left() >= self.get_empty_right() - 2:
             res1 = self.put_structures_heading_right(structures, position)
             res2 = self.put_structures_heading_left(structures, 20 - position - 1)
@@ -140,7 +140,7 @@ def solution(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, t
         i += 2
     
     board.put_remaining()
-    
+
     return str(board)
 
 
