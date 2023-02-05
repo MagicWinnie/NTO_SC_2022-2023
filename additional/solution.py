@@ -111,23 +111,15 @@ def solution(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, t
 
     i = 1
     while True:
-        if board.put_structures_symmetry('RFFFT', i) == (False, False):
-            break
-        i += 5
-    while True:
-        if board.put_structures_symmetry('RFFFC', i) == (False, False):
-            break
-        i += 5
-    while True:
-        if board.put_structures_symmetry('RFT', i) == (False, False):
-            break
-        i += 3
-    while True:
-        if board.put_structures_symmetry('RFC', i) == (False, False):
-            break
-        i += 3
-    while True:
         if board.put_structures_symmetry('FC', i) == (False, False):
+            break
+        i += 2
+    while True:
+        if board.put_structures_symmetry('FT', i) == (False, False):
+            break
+        i += 2
+    while True:
+        if board.put_structures_symmetry('CC', i) == (False, False):
             break
         i += 2
     while True:
@@ -135,9 +127,21 @@ def solution(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, t
             break
         i += 2
     while True:
-        if board.put_structures_symmetry('RC', i) == (False, False):
+        if board.put_structures_symmetry('RFC', i) == (False, False):
             break
-        i += 2
+        i += 3
+    while True:
+        if board.put_structures_symmetry('RFT', i) == (False, False):
+            break
+        i += 3
+    while True:
+        if board.put_structures_symmetry('RFFFT', i) == (False, False):
+            break
+        i += 5
+    while True:
+        if board.put_structures_symmetry('RFFFC', i) == (False, False):
+            break
+        i += 5
     
     board.put_remaining()
 
