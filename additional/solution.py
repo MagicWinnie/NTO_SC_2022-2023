@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 
 class Board:
@@ -65,10 +65,19 @@ class Board:
             self.available[structures[i]] -= 1
         return True
 
+    def put_structures_symmetry(self, structures: str, position: int, priority: bool=False) -> Tuple[bool, bool]:
+        if self.get_empty_left() >= self.get_empty_right() - 2:
+            res1 = self.put_structures_heading_right(structures, position)
+            res2 = self.put_structures_heading_left(structures, 20 - position - 1)
+        else:
+            res2 = self.put_structures_heading_left(structures, 20 - position - 1)
+            res1 = self.put_structures_heading_right(structures, position)
+        return (res1, res2)
+
     def put_remaining(self):
         i = 9
         while i != 1:
-            if self.board[i] == '=':
+            if self.get_empty_left() >= self.get_empty_right() - 2 and self.board[i] == '=':
                 for structure in self._keys_sorted:
                     if self.available[structure] > 0:
                         self.board[i] = structure
@@ -76,7 +85,7 @@ class Board:
                         break
                 else:
                     break
-            if self.board[20 - i - 1] == '=':
+            if self.get_empty_left() <= self.get_empty_right() - 2 and self.board[20 - i - 1] == '=':
                 for structure in self._keys_sorted:
                     if self.available[structure] > 0:
                         self.board[20 - i - 1] = structure
@@ -86,6 +95,12 @@ class Board:
                     break
             i -= 1
 
+    def get_empty_left(self) -> int:
+        return self.board[0:10].count('=')
+
+    def get_empty_right(self) -> int:
+        return self.board[10:20].count('=')
+
     def __str__(self) -> str:
         return ''.join(self.board)
         
@@ -94,10 +109,38 @@ class Board:
 def solution(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, tower: int) -> str:
     board = Board(base, fence, trap, cannon, tower)
 
-    
+    i = 1
+    while True:
+        if board.put_structures_symmetry('RFFFT', i) == (False, False):
+            break
+        i += 5
+    while True:
+        if board.put_structures_symmetry('RFFFC', i) == (False, False):
+            break
+        i += 5
+    while True:
+        if board.put_structures_symmetry('RFT', i) == (False, False):
+            break
+        i += 3
+    while True:
+        if board.put_structures_symmetry('RFC', i) == (False, False):
+            break
+        i += 3
+    while True:
+        if board.put_structures_symmetry('FC', i) == (False, False):
+            break
+        i += 2
+    while True:
+        if board.put_structures_symmetry('RF', i) == (False, False):
+            break
+        i += 2
+    while True:
+        if board.put_structures_symmetry('RC', i) == (False, False):
+            break
+        i += 2
     
     board.put_remaining()
-
+    
     return str(board)
 
 
