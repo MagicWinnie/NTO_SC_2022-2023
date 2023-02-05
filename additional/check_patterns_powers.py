@@ -148,7 +148,7 @@ for r in range(2, 6):
         #     continue
         if 'T' in structure and 'C' in structure:
             continue
-        if structure.count('C') > 2 or structure.count('F') > 2 or structure.count('R') > 2 or structure.count('T') > 2:
+        if structure.count('C') > 2 or structure.count('F') > 3 or structure.count('R') > 2 or structure.count('T') > 2:
             continue
         key_sorted = ''.join(sorted(perm))
         answer = '=' + structure + '=' * (20 - 1 - len(structure))

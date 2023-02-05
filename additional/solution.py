@@ -111,8 +111,8 @@ def solution(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, t
 
     patterns = {
         "RFFTT": 301,
-        "FFTT": 261,
-        "RFRFT": 209,
+        # "FFTT": 261,
+        # "RFRFT": 209,
         "RFRTT": 193,
         "RFTT": 181,
         "FRFT": 169,
