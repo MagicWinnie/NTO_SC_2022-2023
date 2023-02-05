@@ -45,7 +45,7 @@ class Structre:
         return f"{self.name.capitalize()}({self.hp}, {self.dmg})"
 
 
-def run(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, tower: int, answer: str) -> Tuple[bool, int]:
+def simulation(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, tower: int, answer: str) -> Tuple[bool, int]:
     # check if vars are in correct range    
     if not(1 <= base <= 3): raise Exception('Base value is not in range')
     if not(1 <= fence <= 6): raise Exception('Fence value is not in range')
@@ -158,7 +158,7 @@ def run(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, tower:
 
 
 if __name__ == "__main__":
-    print(run(1, 1, 1, 2, 1, 1, 1, '========FBF========='))
-    print(run(1, 1, 1, 3, 3, 1, 2, '=R==FTC=B==F=TFRR==='))
-    print(run(24, 1, 1, 3, 3, 1, 2, '=R==FTC=B==F=TFRR==='))
+    print(simulation(1, 1, 1, 2, 1, 1, 1, '========FBF========='))
+    print(simulation(1, 1, 1, 3, 3, 1, 2, '=R==FTC=B==F=TFRR==='))
+    print(simulation(24, 1, 1, 3, 3, 1, 2, '=R==FTC=B==F=TFRR==='))
 
