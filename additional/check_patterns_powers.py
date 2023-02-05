@@ -144,11 +144,11 @@ for r in range(2, 6):
         structure = ''.join(perm)
         if len(structure) in (4, 5) and not structure.endswith('T'):
             continue
-        if len(structure) not in (2,):
-            continue
+        # if len(structure) not in (2,3):
+        #     continue
         if 'T' in structure and 'C' in structure:
             continue
-        if structure.count('C') > 1 or structure.count('F') > 2 or structure.count('R') > 2 or structure.count('T') > 1:
+        if structure.count('C') > 2 or structure.count('F') > 2 or structure.count('R') > 2 or structure.count('T') > 2:
             continue
         key_sorted = ''.join(sorted(perm))
         answer = '=' + structure + '=' * (20 - 1 - len(structure))
