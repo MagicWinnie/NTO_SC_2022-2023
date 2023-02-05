@@ -27,7 +27,7 @@ class Board:
         self.available['B'] = 0
 
     def put_symmetry(self, structure: str, position: int) -> bool:
-        if self.board[position] == 'B' or self.board[20 - position - 1] or self.available[structure] < 2:
+        if self.board[position] == 'B' or self.board[20 - position - 1] == 'B' or self.available[structure] < 2:
             return False
         self.board[position] = structure
         self.board[20 - position - 1] = structure
