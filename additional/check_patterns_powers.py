@@ -137,15 +137,19 @@ def simulation(answer: str) -> Tuple[bool, int, int]:
         points += 1
 
 alphabet = 'CFRT'
-comb_dmg: Dict[str, int] = {}
+comb_dmg: Dict[str, Tuple[str, int]] = {}
 for r in range(2, 6):
     perms = list(product(alphabet, repeat=r)) # type: ignore
     for perm in perms:
         structure = ''.join(perm)
         if len(structure) in (4, 5) and not structure.endswith('T'):
             continue
+        key_sorted = ''.join(sorted(perm))
         answer = '=' + structure + '=' * (20 - 1 - len(structure))
-        comb_dmg[structure] = simulation(answer)[2]
-comb_dmg = {k: v for k, v in sorted(comb_dmg.items(), key=lambda item: item[1], reverse=True)}
+        if key_sorted not in comb_dmg:
+            comb_dmg[key_sorted] = ('', -1)
+        if simulation(answer)[2] > comb_dmg[key_sorted][1]:
+            comb_dmg[key_sorted] = (structure, simulation(answer)[2])
+new_d = {v[0]: v[1] for k, v in sorted(comb_dmg.items(), key=lambda item: item[1][1], reverse=True)}
 with open('output.json', 'w') as outfile:
-    json.dump(comb_dmg, outfile, indent=4)
+    json.dump(new_d, outfile, indent=4)
