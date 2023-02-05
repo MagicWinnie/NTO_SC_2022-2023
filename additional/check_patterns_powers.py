@@ -142,6 +142,8 @@ for r in range(2, 6):
     perms = list(product(alphabet, repeat=r)) # type: ignore
     for perm in perms:
         structure = ''.join(perm)
+        if len(structure) in (4, 5) and not structure.endswith('T'):
+            continue
         answer = '=' + structure + '=' * (20 - 1 - len(structure))
         comb_dmg[structure] = simulation(answer)[2]
 comb_dmg = {k: v for k, v in sorted(comb_dmg.items(), key=lambda item: item[1], reverse=True)}
