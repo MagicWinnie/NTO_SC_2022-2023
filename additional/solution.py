@@ -126,22 +126,6 @@ def solution(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, t
         if board.put_structures_symmetry('RF', i) == (False, False):
             break
         i += 2
-    while True:
-        if board.put_structures_symmetry('RFC', i) == (False, False):
-            break
-        i += 3
-    while True:
-        if board.put_structures_symmetry('RFT', i) == (False, False):
-            break
-        i += 3
-    while True:
-        if board.put_structures_symmetry('RFFFT', i) == (False, False):
-            break
-        i += 5
-    while True:
-        if board.put_structures_symmetry('RFFFC', i) == (False, False):
-            break
-        i += 5
     
     board.put_remaining()
 
