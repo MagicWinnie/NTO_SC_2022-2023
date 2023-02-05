@@ -1,112 +1,104 @@
-from typing import List
+from typing import Dict, List
+
+
+class Board:
+    def __init__(self, base: int, fence: int, trap: int, cannon: int, tower: int):
+        self.available: Dict[str, int] = {
+            'B': base,
+            'F': fence,
+            'R': trap,
+            'C': cannon,
+            'T': tower
+        }
+        self._keys_sorted = 'TCRF'
+        self.board: List[str] = ['=' for _ in range(20)]
+        self.put_bases()
+
+    def put_bases(self):
+        if self.available['B'] == 1:
+            self.board[9] = 'B'
+        elif self.available['B'] == 2:
+            self.board[9] = 'B'
+            self.board[10] = 'B'
+        elif self.available['B'] == 3:
+            self.board[8] = 'B'
+            self.board[9] = 'B'
+            self.board[10] = 'B'
+        self.available['B'] = 0
+
+    def put_symmetry(self, structure: str, position: int) -> bool:
+        if self.board[position] == 'B' or self.board[20 - position - 1] or self.available[structure] < 2:
+            return False
+        self.board[position] = structure
+        self.board[20 - position - 1] = structure
+        self.available[structure] -= 2
+        return True
+    
+    def put(self, structure: str, position: int) -> bool:
+        if self.board[position] == 'B' or self.available[structure] < 1:
+            return False
+        self.board[position] = structure
+        self.available[structure] -= 1
+        return True
+
+    def put_structures_heading_right(self, structures: str, position: int) -> bool:
+        for i in range(len(structures)):
+            if position + i >= 20 or self.board[position + i] != '=':
+                return False
+        for structure in self.available:
+            if structures.count(structure) > self.available[structure]:
+                return False
+        for i in range(len(structures)):
+            self.board[position + i] = structures[i]
+            self.available[structures[i]] -= 1
+        return True
+
+    def put_structures_heading_left(self, structures: str, position: int) -> bool:
+        for i in range(len(structures)):
+            if position - i < 0 or self.board[position - i] != '=':
+                return False
+        for structure in self.available:
+            if structures.count(structure) > self.available[structure]:
+                return False
+        for i in range(len(structures)):
+            self.board[position - i] = structures[i]
+            self.available[structures[i]] -= 1
+        return True
+
+    def put_remaining(self):
+        i = 9
+        while i != 1:
+            if self.board[i] == '=':
+                for structure in self._keys_sorted:
+                    if self.available[structure] > 0:
+                        self.board[i] = structure
+                        self.available[structure] -= 1
+                        break
+                else:
+                    break
+            if self.board[20 - i - 1] == '=':
+                for structure in self._keys_sorted:
+                    if self.available[structure] > 0:
+                        self.board[20 - i - 1] = structure
+                        self.available[structure] -= 1
+                        break
+                else:
+                    break
+            i -= 1
+
+    def __str__(self) -> str:
+        return ''.join(self.board)
+        
 
 
 def solution(hp: int, dmg: int, base: int, fence: int, trap: int, cannon: int, tower: int) -> str:
-    answer: List[str] = ['=' for _ in range(20)]
+    board = Board(base, fence, trap, cannon, tower)
 
-    # bases
-    if base == 2:
-        answer[9] = 'B'
-        answer[10] = 'B'
-    elif base == 1:
-        answer[9] = 'B'
-    elif base == 3:
-        answer[8] = 'B'
-        answer[9] = 'B'
-        answer[10] = 'B'
-    base = 0
+    
+    
+    board.put_remaining()
 
-    # trap + fence + fence + fence + tower
-    i = 1
-    while trap >= 2 and fence >= 6 and tower >= 2:
-        answer[i] = 'R'
-        trap -= 1
-        answer[20 - i - 1] = 'R'
-        trap -= 1
-        i += 1
-        for _ in range(3):
-            answer[i] = 'F'
-            fence -= 1
-            answer[20 - i - 1] = 'F'
-            fence -= 1
-            i += 1
-        answer[i] = 'T'
-        tower -= 1
-        answer[20 - i - 1] = 'T'
-        tower -= 1
-        i += 1
-    # trap + fence + fence + fence + cannon
-    while trap >= 2 and fence >= 6 and cannon >= 2:
-        answer[i] = 'R'
-        trap -= 1
-        answer[20 - i - 1] = 'R'
-        trap -= 1
-        i += 1
-        for _ in range(3):
-            answer[i] = 'F'
-            fence -= 1
-            answer[20 - i - 1] = 'F'
-            fence -= 1
-            i += 1
-        answer[i] = 'C'
-        cannon -= 1
-        answer[20 - i - 1] = 'C'
-        cannon -= 1
-        i += 1
-    # trap + fence + cannon
-    while trap >= 2 and fence >= 2 and cannon >= 2:
-        answer[i] = 'R'
-        trap -= 1
-        answer[20 - i - 1] = 'R'
-        trap -= 1
-        i += 1
-        answer[i] = 'F'
-        fence -= 1
-        answer[20 - i - 1] = 'F'
-        fence -= 1
-        i += 1
-        answer[i] = 'C'
-        cannon -= 1
-        answer[20 - i - 1] = 'C'
-        cannon -= 1
-        i += 1
-    # trap + fence + tower
-    while trap >= 2 and fence >= 2 and tower >= 2:
-        answer[i] = 'R'
-        trap -= 1
-        answer[20 - i - 1] = 'R'
-        trap -= 1
-        i += 1
-        answer[i] = 'F'
-        fence -= 1
-        answer[20 - i - 1] = 'F'
-        fence -= 1
-        i += 1
-        answer[i] = 'T'
-        tower -= 1
-        answer[20 - i - 1] = 'T'
-        tower -= 1
-        i += 1
-    # fence + tower
-    while trap >= 2 and fence >= 2 and tower >= 2:
-        answer[i] = 'R'
-        trap -= 1
-        answer[20 - i - 1] = 'R'
-        trap -= 1
-        i += 1
-        answer[i] = 'F'
-        fence -= 1
-        answer[20 - i - 1] = 'F'
-        fence -= 1
-        i += 1
-        answer[i] = 'T'
-        tower -= 1
-        answer[20 - i - 1] = 'T'
-        tower -= 1
-        i += 1
-
-    print(base, fence, trap, cannon, tower)
-    return ''.join(answer)
+    return str(board)
 
 
 if __name__ == "__main__":
