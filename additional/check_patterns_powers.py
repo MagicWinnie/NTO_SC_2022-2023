@@ -144,7 +144,6 @@ for r in range(2, 6):
         structure = ''.join(perm)
         answer = '=' + structure + '=' * (20 - 1 - len(structure))
         comb_dmg[structure] = simulation(answer)[2]
-    print(r)
 comb_dmg = {k: v for k, v in sorted(comb_dmg.items(), key=lambda item: item[1], reverse=True)}
 with open('output.json', 'w') as outfile:
     json.dump(comb_dmg, outfile, indent=4)
